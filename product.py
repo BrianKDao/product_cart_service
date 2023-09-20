@@ -31,7 +31,7 @@ def get_details(product_id):
         return jsonify({"error": "Product not found"}), 404
 
 # /products (POST): Allow the addition of new grocery products to the inventory with information such as name, price, and quantity.
-@app.route('/products', methods=['GET'])
+@app.route('/products', methods=['POST'])
 def add_product(name, price, quantity):
     data = request.json
     if "name" not in data:
