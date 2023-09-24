@@ -8,6 +8,7 @@ import os
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from product import Product
+from db import Product, Cart, carts
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 app = Flask(__name__)
