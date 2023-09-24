@@ -11,8 +11,8 @@ db = SQLAlchemy(app)
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    price = db.Column(db.Float, default=False)
-    quantity = db.Column(db.Integer, default=False)
+    price = db.Column(db.Float, nullable=False)
+    quantity = db.Column(db.Integer, nullable=False)
 
 # Cart Model
 class Cart(db.Model):
@@ -26,5 +26,8 @@ carts = db.Table(
 )
 
 if __name__ == '__main__':
-    # db.create_all()
+    # Create the database and tables if they don't exist
+    with app.app_context():
+        db.create_all()
+    
     app.run(debug=True)
