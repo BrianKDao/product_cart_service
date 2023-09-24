@@ -43,5 +43,17 @@ def add_product(name, price, quantity):
 
     return jsonify({"message": "Product Added", "product": {"name": new_product.name, "price": new_product.price, "quantity": new_product.quantity}})
 
+# /products (POST): Allows the adjustment of product quantities 
+@app.route('/products', methods=['POST'])
+def adj_product(id, quantity):
+    data = request.json
+    if "id" not in data:
+        return jsonify({"error": "Name is required"}), 400
+    
+    if "quantity" not in data:
+        return jsonify({"error": "Quantity is required"}), 400
+    
+    
+
 if __name__ == '__main__':
     app.run(debug=True)
