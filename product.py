@@ -1,18 +1,12 @@
 import os
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
+from db import Product, Cart, carts
+
 basedir = os.path.abspath(os.path.dirname(__file__))
-
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'tasks.sqlite')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'productcart.sqlite')
 db = SQLAlchemy(app)
-
-# Product Model
-class Product(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    price = db.Column(db.Double, default=False)
-    quantity = db.Column(db.Integer, default=False)
 
 # /products (GET): Retrieve a list of available grocery products, including their names, prices, and quantities in stock.
 @app.route('/products', methods=['GET'])
@@ -50,5 +44,4 @@ def add_product(name, price, quantity):
     return jsonify({"message": "Product Added", "product": {"name": new_product.name, "price": new_product.price, "quantity": new_product.quantity}})
 
 if __name__ == '__main__':
-    #db.create_all()
     app.run(debug=True)
