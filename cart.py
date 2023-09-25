@@ -29,7 +29,7 @@ def get_cart(user_id):
     data = []
     for row in result:
         product_id = row["product_id"]
-        product = requests.get(f'https://product-service-01oh.onrender.com/product/{product_id}')
+        product = requests.get(f'http://product-service-01oh.onrender.com/products/{product_id}')
         response = product.json()
         total = round(row["quantity"] * response["product"]["price"],2)
         data.append({'name':response["product"]["name"], 'quantity': row["quantity"], 'total': total})
@@ -64,7 +64,7 @@ def add_product(user_id, product_id):
         result = connection.execute(stmt)
 
         data = {"quantity": data["quantity"] * -1}
-        response = requests.post(f'https://product-service-01oh.onrender.com/products/{product_id}', json=data)  
+        response = requests.post(f'http://product-service-01oh.onrender.com/products/{product_id}', json=data)  
         connection.close()
         return jsonify({"message": "More Product Changed"})
     else:
@@ -72,7 +72,7 @@ def add_product(user_id, product_id):
         result = connection.execute(stmt)
         
         data = {"quantity": data["quantity"] * -1}
-        response = requests.post(f'https://product-service-01oh.onrender.com/products/{product_id}', json=data)  
+        response = requests.post(f'http://product-service-01oh.onrender.com/products/{product_id}', json=data)  
         connection.close()
         return jsonify({"message": "Product Changed"})
 
