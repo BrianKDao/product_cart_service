@@ -86,7 +86,7 @@ def remove_product(user_id, product_id):
 
     quantity_to_remove = {"quantity": data["quantity"] * -1}
 
-    response = requests.post(f'http://127.0.0.1:5000/cart/{user_id}/add/{product_id}', json=quantity_to_remove)
+    response = requests.post(f'http://cart-service-6gs1.onrender.com/cart/{user_id}/add/{product_id}', json=quantity_to_remove)
     data = response.json()
     return data
 
