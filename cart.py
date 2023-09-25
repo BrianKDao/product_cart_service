@@ -100,4 +100,4 @@ def add_cart():
     return jsonify({"message": "New cart created", "cart_id": new_cart.id}), 201
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5001)
+    app.run(debug=True)
