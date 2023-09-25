@@ -22,12 +22,6 @@ class Cart(db.Model):
 carts = db.Table(
     'carts',
     db.Column('cart_id', db.Integer, db.ForeignKey('cart.id'), primary_key=True),
-    db.Column('product_id', db.Integer, db.ForeignKey('product.id'), primary_key=True)
+    db.Column('product_id', db.Integer, db.ForeignKey('product.id'), primary_key=True),
+    db.Column('quantity', db.Integer, nullable=False)
 )
-
-if __name__ == '__main__':
-    # Create the database and tables if they don't exist
-    with app.app_context():
-        db.create_all()
-    
-    app.run(debug=True)
