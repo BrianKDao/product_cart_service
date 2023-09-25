@@ -31,9 +31,8 @@ def get_cart(user_id):
         product_id = row["product_id"]
         product = requests.get(f'http://127.0.0.1:5000/products/{product_id}')
         response = product.json()
-        total = response["quantity"] * response["price"]
-        data.append({'name':response["name"], 'quantity': product["quantity"], 'total': total})
-        data.append({"product_id": product_id})
+        total = round(row["quantity"] * response["product"]["price"],2)
+        data.append({'name':response["product"]["name"], 'quantity': row["quantity"], 'total': total})
 
     connection.close()
     return jsonify({"Cart Contents": data})
@@ -51,14 +50,17 @@ def add_product(user_id, product_id):
     metadata = MetaData()
     carts_table = Table('carts', metadata, autoload=True, autoload_with=engine)
     connection = engine.connect()
-    query = text("SELECT 1 FROM carts WHERE cart_id = :user_id AND product_id = :product_id")
+    query = text("SELECT * FROM carts WHERE cart_id = :user_id AND product_id = :product_id")
     result = connection.execute(query, user_id=user_id, product_id=product_id)
     existing_entry = result.scalar()
     
     if existing_entry:
-        response = requests.get(f'http://127.0.0.1:5000/products/{product_id}')
-        details = response.json()
-        stmt = update(carts_table).where(carts_table.c.cart_id == user_id).values(quantity=data["quantity"] + details["product"]["quantity"])
+        query = text("SELECT * FROM carts WHERE cart_id = :user_id AND product_id = :product_id")
+        result = connection.execute(query, user_id=user_id, product_id=product_id)
+        current_quantity = 0
+        for row in result:
+            current_quantity = row['quantity']
+        stmt = update(carts_table).where(carts_table.c.cart_id == user_id).values(quantity=data["quantity"] + current_quantity)
         result = connection.execute(stmt)
 
         data = {"quantity": data["quantity"] * -1}
@@ -84,7 +86,9 @@ def remove_product(user_id, product_id):
 
     quantity_to_remove = {"quantity": data["quantity"] * -1}
 
-    response = requests.post(f'http://127.0.0.1:5000/products/{product_id}', json=quantity_to_remove)
+    response = requests.post(f'http://127.0.0.1:5001/cart/{user_id}/add/{product_id}', json=quantity_to_remove)
+    data = response.json()
+    return data
 
 
 @app.route('/cart', methods=['GET'])
@@ -96,4 +100,4 @@ def add_cart():
     return jsonify({"message": "New cart created", "cart_id": new_cart.id}), 201
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5001)

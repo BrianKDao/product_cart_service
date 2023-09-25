@@ -47,7 +47,7 @@ def add_product():
 
 # /products/product_id (POST): Allows the adjustment of product quantities.
 @app.route('/products/<int:product_id>', methods=['POST'])
-def adj_product(product_id, quantity):
+def adj_product(product_id):
     data = request.json
     if "quantity" not in data:
         return jsonify({"error": "Quantity is required"}), 400
