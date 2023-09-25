@@ -29,7 +29,7 @@ def get_cart(user_id):
     data = []
     for row in result:
         product_id = row["product_id"]
-        product = requests.get(f'http://127.0.0.1:5000/products/{product_id}')
+        product = requests.get(f'https://product-service-01oh.onrender.com/{product_id}')
         response = product.json()
         total = round(row["quantity"] * response["product"]["price"],2)
         data.append({'name':response["product"]["name"], 'quantity': row["quantity"], 'total': total})
@@ -64,7 +64,7 @@ def add_product(user_id, product_id):
         result = connection.execute(stmt)
 
         data = {"quantity": data["quantity"] * -1}
-        response = requests.post(f'http://127.0.0.1:5000/products/{product_id}', json=data)  
+        response = requests.post(f'https://product-service-01oh.onrender.com/products/{product_id}', json=data)  
         connection.close()
         return jsonify({"message": "More Product Changed"})
     else:
@@ -72,7 +72,7 @@ def add_product(user_id, product_id):
         result = connection.execute(stmt)
         
         data = {"quantity": data["quantity"] * -1}
-        response = requests.post(f'http://127.0.0.1:5000/products/{product_id}', json=data)  
+        response = requests.post(f'https://product-service-01oh.onrender.com/products/{product_id}', json=data)  
         connection.close()
         return jsonify({"message": "Product Changed"})
 
@@ -86,7 +86,7 @@ def remove_product(user_id, product_id):
 
     quantity_to_remove = {"quantity": data["quantity"] * -1}
 
-    response = requests.post(f'http://127.0.0.1:5001/cart/{user_id}/add/{product_id}', json=quantity_to_remove)
+    response = requests.post(f'http://127.0.0.1:5000/cart/{user_id}/add/{product_id}', json=quantity_to_remove)
     data = response.json()
     return data
 
