@@ -29,7 +29,7 @@ def get_cart(user_id):
     data = []
     for row in result:
         product_id = row["product_id"]
-        product = requests.get(f'https://product-service-01oh.onrender.com/{product_id}')
+        product = requests.get(f'https://product-service-01oh.onrender.com/product/{product_id}')
         response = product.json()
         total = round(row["quantity"] * response["product"]["price"],2)
         data.append({'name':response["product"]["name"], 'quantity': row["quantity"], 'total': total})
